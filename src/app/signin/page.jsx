@@ -1,11 +1,25 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SignInPage() {
+  const { data: session, status } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      // Redirect to home or dashboard if already logged in
+      router.replace("/success");
+    }
+  }, [status, router]);
+
+  // Optional: show loading state
+  // if (status === "loading") {
+  //   return <p>Loading...</p>;
+  // }
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,13 +32,13 @@ export default function SignInPage() {
       email,
       password,
     });
-    
+
     if (result.ok) {
       console.log("user valid");
-      router.push("/success"); 
+      router.push("/success");
     } else {
       console.log("Sign-in error:", result.error);
-      setError("Invalid email or password"); 
+      setError("Invalid email or password");
     }
   };
 
