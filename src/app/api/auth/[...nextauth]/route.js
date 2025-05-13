@@ -10,7 +10,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-          const { email, password } = credentials;
+        const { email, password } = credentials;
 
         // ✅ Hardcoded admin check
         const ADMIN_EMAIL = "admin@example.com";
@@ -28,8 +28,10 @@ export const authOptions = {
             profilePic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo0rcnkCIh4V-5JOhdPqfi9ESlZ9GadzwfSw&s",
           };
         }
+        
         // ❌ Optional: handle real user login via API
-        const res = await fetch("https://api.xcamper.com/api/user/login", {
+        // const res = await fetch("https://api.xcamper.com/api/user/login", {
+        const res = await fetch(`${process.env.BASE_API_URL}/api/user/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -44,7 +46,7 @@ export const authOptions = {
         // });
 
         const response = await res.json();
-        console.log("Auth API response:", response);
+        console.log("Auth API response:", response);        
 
         if (res.ok && response.user) return response.user;
         return null;
@@ -53,8 +55,8 @@ export const authOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 2 * 60, // 30 minutes in seconds
-    updateAge: 0, // Optional: force JWT to be refreshed every 5 minutes
+    maxAge: 10, // 30 minutes in seconds
+    updateAge: 5, // Optional: force JWT to be refreshed every 5 minutes
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: { signIn: "" },

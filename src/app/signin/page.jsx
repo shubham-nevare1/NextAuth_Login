@@ -15,10 +15,6 @@ export default function SignInPage() {
     }
   }, [status, router]);
 
-  // Optional: show loading state
-  // if (status === "loading") {
-  //   return <p>Loading...</p>;
-  // }
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
