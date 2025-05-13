@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 // import { SessionProvider } from "next-auth/react";
 import { Providers } from "./Providers";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +26,9 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {" "}
-        <Providers>{children} </Providers>
+        <Providers>
+          {children} <SpeedInsights />{" "}
+        </Providers>
       </body>
     </html>
   );
