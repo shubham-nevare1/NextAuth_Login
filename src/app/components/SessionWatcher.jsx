@@ -20,12 +20,12 @@
 //           signOut({ callbackUrl: "/" });
 //         }
 //       }
-//     }, 5000); 
+//     }, 5000);
 
 //     return () => clearInterval(interval);
 //   }, [session]);
 
-//   return null; 
+//   return null;
 // }
 "use client";
 
@@ -44,12 +44,17 @@ export default function SessionWatcher() {
       const now = new Date();
       const expiry = new Date(session.expires);
 
+      // if (now >= expiry) {
+      //   clearInterval(interval);
+      //   const confirmLogout = confirm("Session expired. Please log in again.");
+      //   if (confirmLogout) {
+      //     signOut({ callbackUrl: "/" });
+      //   }
+      // }
       if (now >= expiry) {
         clearInterval(interval);
-        const confirmLogout = confirm("Session expired. Please log in again.");
-        if (confirmLogout) {
-          signOut({ callbackUrl: "/" });
-        }
+        alert("🔒 Session expired. You will be logged out.");
+        signOut({ callbackUrl: "/" });
       }
     }, 5000);
 
