@@ -6,7 +6,8 @@ export default function SuccessPage() {
   const { data: session, status } = useSession();
 
   if (!session) {
-    return <div className="p-4 text-center">Not authorized</div>;
+    // return <div className="p-4 text-center">Not authorized</div>;
+    return null;
   }
   console.log("session", session);
   // tp
