@@ -25,10 +25,11 @@ export const authOptions = {
             personalInfo: {
               occupation: "Administrator",
             },
-            profilePic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo0rcnkCIh4V-5JOhdPqfi9ESlZ9GadzwfSw&s",
+            profilePic:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo0rcnkCIh4V-5JOhdPqfi9ESlZ9GadzwfSw&s",
           };
         }
-        
+
         // ❌ Optional: handle real user login via API
         // const res = await fetch("https://api.xcamper.com/api/user/login", {
         const res = await fetch(`${process.env.BASE_API_URL}/api/user/login`, {
@@ -46,7 +47,7 @@ export const authOptions = {
         // });
 
         const response = await res.json();
-        console.log("Auth API response:", response);        
+        console.log("Auth API response:", response);
 
         if (res.ok && response.user) return response.user;
         return null;
@@ -55,8 +56,11 @@ export const authOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 10, // 30 minutes in seconds
-    updateAge: 5, // Optional: force JWT to be refreshed every 5 minutes
+    maxAge: 11, // in seconds
+    updateAge: 1000000, // very high number to prevent refresh on reload
+  },
+  jwt: {
+    maxAge: 11,
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: { signIn: "" },

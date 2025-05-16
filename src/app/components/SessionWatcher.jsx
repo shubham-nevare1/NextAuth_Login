@@ -1,34 +1,65 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function SessionWatcher() {
   const { data: session, status } = useSession();
+  const [timeLeft, setTimeLeft] = useState(null);
 
   useEffect(() => {
-    // Wait for session to be authenticated before proceeding
     if (status !== "authenticated" || !session?.expires) return;
 
-    const expiryTime = new Date(session.expires).getTime();
+    let expiryTime = localStorage.getItem("sessionExpiry");
+
+    if (!expiryTime) {
+      // Save the original expiry only once
+      expiryTime = new Date(session.expires).getTime().toString();
+      localStorage.setItem("sessionExpiry", expiryTime);
+    }
+
+    const expiry = parseInt(expiryTime);
     const now = Date.now();
-    const timeoutDuration = expiryTime - now;
+    const timeoutDuration = expiry - now;
 
     if (timeoutDuration <= 0) {
       alert("🔒 Session expired. You will be logged out.");
+      localStorage.removeItem("sessionExpiry");
       signOut({ callbackUrl: "/" });
       return;
     }
 
-    // Set timeout based on session expiry
-    const timeout = setTimeout(() => {
+    setTimeLeft(timeoutDuration);
+
+    const logoutTimeout = setTimeout(() => {
       alert("🔒 Session expired. You will be logged out.");
+      localStorage.removeItem("sessionExpiry");
       signOut({ callbackUrl: "/" });
     }, timeoutDuration);
 
-    // Cleanup timeout on component unmount
-    return () => clearTimeout(timeout);
+    const interval = setInterval(() => {
+      const newTimeLeft = expiry - Date.now();
+      if (newTimeLeft <= 0) {
+        clearInterval(interval);
+        setTimeLeft(0);
+      } else {
+        setTimeLeft(newTimeLeft);
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(logoutTimeout);
+      clearInterval(interval);
+    };
   }, [session, status]);
 
-  return null; // No need to render anything if the session is authenticated and handled
+  if (status !== "authenticated") return null;
+
+  return (
+    <div className="fixed bottom-4 right-4 bg-gray-800 text-white p-2 rounded shadow text-sm font-mono">
+      {timeLeft === null
+        ? "Checking session..."
+        : `Session expires in: ${Math.floor(timeLeft / 1000 / 60)}m ${Math.floor((timeLeft / 1000) % 60)}s`}
+    </div>
+  );
 }
