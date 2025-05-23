@@ -1,10 +1,8 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
-import Navbar from "../components/Navbar";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import toast from "react-hot-toast";
 export default function SuccessPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -41,14 +39,6 @@ export default function SuccessPage() {
     // return <div className="p-4 text-center">Not authorized</div>;
     return null;
   }
-  const handleLogout = () => {
-    localStorage.removeItem("sessionExpiry");
-    //signOut({ callbackUrl: "/" }); // 🔒 redirect to login
-    toast.error("👋 Logged out successfully!");
-    setTimeout(() => {
-      signOut({ callbackUrl: "/" });
-    }, 1000); // Give time for toast to show
-  };
 
   console.log("session", session);
 

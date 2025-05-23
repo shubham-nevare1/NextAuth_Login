@@ -1,6 +1,19 @@
 "use client";
 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 export default function ContactPage() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
+      // page show only login
+      useEffect(() => {
+        if (status === "unauthenticated") {
+          // Redirect if not logged in
+          router.replace("/");
+        }
+      }, [status, router]);
   return (
     <div className="h-full bg-yellow-50 p-10">
       <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md">

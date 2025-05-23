@@ -1,8 +1,19 @@
 "use client";
 
-import React from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
 export default function AboutPage() {
+   const { data: session, status } = useSession();
+    const router = useRouter();
+    // page show only login
+    useEffect(() => {
+      if (status === "unauthenticated") {
+        // Redirect if not logged in
+        router.replace("/");
+      }
+    }, [status, router]);
   return (
     <div className="h-full bg-gray-50 flex flex-col items-center justify-center p-10">
       <h1 className="text-4xl font-bold text-blue-800 mb-4">About Us</h1>

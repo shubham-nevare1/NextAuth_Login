@@ -1,5 +1,7 @@
 "use client";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -8,6 +10,16 @@ function user() {
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({ name: "", city: "" });
   const [userData, setUserData] = useState(null);
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  // page show only login
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      // Redirect if not logged in
+      router.replace("/");
+    }
+  }, [status, router]);
 
   //get
   useEffect(() => {
@@ -104,6 +116,7 @@ function user() {
   const closePopup = () => {
     setUserData(null);
   };
+
   return (
     <>
       <div className="flex flex-col items-center pt-2 h-screen px-3">
