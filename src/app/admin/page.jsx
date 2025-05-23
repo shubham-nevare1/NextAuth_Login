@@ -22,7 +22,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-red-50 p-10">
+    <div className="h-full bg-red-50 p-10">
       <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md">
         <h1 className="text-3xl font-bold text-red-800 mb-4">Admin Panel</h1>
         <p className="text-gray-700 text-lg">

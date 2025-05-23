@@ -3,6 +3,7 @@
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SignInPage() {
   const { data: session, status } = useSession();
@@ -14,7 +15,6 @@ export default function SignInPage() {
       router.replace("/success");
     }
   }, [status, router]);
-
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,16 +30,18 @@ export default function SignInPage() {
     });
 
     if (result.ok) {
+      toast.success("Login Successful!");
       console.log("user valid");
       router.push("/success");
     } else {
+      toast.error("Invalid email or password");
       console.log("Sign-in error:", result.error);
       setError("Invalid email or password");
     }
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
+    <div className="flex h-screen items-center justify-center bg-gray-100 px-5">
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md space-y-4">
         <h1 className="text-2xl font-bold text-center">Login</h1>
         {error && <p className="text-red-500 text-center">{error}</p>}

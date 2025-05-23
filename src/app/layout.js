@@ -3,6 +3,7 @@ import "./globals.css";
 // import { SessionProvider } from "next-auth/react";
 import { Providers } from "./Providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Navbar from "./components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,11 @@ export default function RootLayout({ children }) {
       >
         {" "}
         <Providers>
-          {children} <SpeedInsights />{" "}
+          <div className="flex min-h-screen  container mx-auto">
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <SpeedInsights />{" "}
+          </div>
         </Providers>
       </body>
     </html>

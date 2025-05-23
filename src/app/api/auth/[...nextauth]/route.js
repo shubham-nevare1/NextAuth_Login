@@ -56,7 +56,7 @@ export const authOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 11, // in seconds
+    maxAge: 10 * 60, // in seconds
     updateAge: 1000000, // very high number to prevent refresh on reload
   },
   jwt: {
